@@ -6,12 +6,14 @@ Wants=network-online.target
 Requires=docker.service
 
 [Service]
+Environment=COMPOSE_PROJECT_NAME=pi_air_quality_monitor
 Type=simple
 User=pi
 Group=docker
 WorkingDirectory=/home/pi/pi_air_quality_monitor
 # Create log dir before docker-compose tries to write
 ExecStartPre=/bin/mkdir -p /tmp/sensor_logs
+ExecStartPre=/usr/bin/docker-compose down
 ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/docker-compose up
 ExecStop=/usr/bin/docker-compose down
