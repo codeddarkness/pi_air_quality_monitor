@@ -1,6 +1,4 @@
-# paqm.service v1.1.0
-# Pi Air Quality Monitor — starts docker-compose stack at boot
-# After docker.service ensures daemon is ready before compose runs
+# paqm.service v1.1.1
 [Unit]
 Description=Pi Air Quality Monitor (docker-compose stack)
 After=network-online.target docker.service
@@ -12,6 +10,8 @@ Type=simple
 User=pi
 Group=docker
 WorkingDirectory=/home/pi/pi_air_quality_monitor
+# Create log dir before docker-compose tries to write
+ExecStartPre=/bin/mkdir -p /tmp/sensor_logs
 ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/docker-compose up
 ExecStop=/usr/bin/docker-compose down
