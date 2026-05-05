@@ -30,6 +30,7 @@ served via Flask + Redis + Docker with an auto-refreshing web interface.
 ```bash
 git clone git@github.com:codeddarkness/pi_air_quality_monitor.git
 cd pi_air_quality_monitor
+cp config.env.example config.env   # edit for your system
 bash install.sh
 ```
 

@@ -82,19 +82,19 @@ function updateChart(data) {
     chart.update();
 }
 
-function setStatus(text, ok) {
+function setStatus(text, good) {
     document.getElementById('status-text').textContent = text;
-    document.getElementById('status-dot').style.background = ok ? '#3fb950' : '#f85149';
+    document.getElementById('status-dot').style.background = good ? '#3fb950' : '#f85149';
 }
 
 function fetchAndUpdate() {
     $.getJSON('/api/')
         .done(function(data) {
             updateChart(data);
-            const latest = data.historical.labels.slice(-1)[0] || '—';
+            const latest = data.historical.labels.slice(-1)[0] || '--';
             setStatus('Last reading: ' + latest + ' · updates every 60s', true);
         })
-        .fail(function() { setStatus('API unreachable — retrying...', false); });
+        .fail(function() { setStatus('API unreachable -- retrying...', false); });
 }
 
 fetchAndUpdate();
