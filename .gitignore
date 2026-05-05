@@ -14,3 +14,7 @@ last_count.runs
 config.env
 firefox-esr-run.log
 lazy*.sh
+promote_v1.2.0.sh
+firefox-esr-run.log
+last_count.runs
+lazy*.sh

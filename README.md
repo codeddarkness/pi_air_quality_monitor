@@ -3,7 +3,7 @@
 Real-time air quality monitoring using a SDS011 particulate matter sensor,
 served via Flask + Redis + Docker with an auto-refreshing web interface.
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue)](CHANGELOG.md)
 [![Branch](https://img.shields.io/badge/branch-main%20%7C%20custom__dev-green)](./)
 
 ---
@@ -156,7 +156,7 @@ pi_air_quality_monitor/
 ├── install.sh                  Fresh deployment installer
 ├── Makefile                    Dev shortcuts
 ├── aqi_monitor.func            Symlink → scripts/service/aqi_monitor.func
-├── VERSION                     1.0.0
+├── VERSION                     1.2.0
 └── CHANGELOG.md
 ```
 
