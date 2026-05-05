@@ -39,7 +39,7 @@ case $1 in
 	  sensor_online
 	  [[ -n "${is_running}" ]] && { already_running ; return 2>/dev/null || exit ; }
 	  sleep 20
-	  nohup docker-compose up >> ${log} 2>&1 & 
+	  nohup docker-compose up > ${log} >/dev/null 2>&1 & 
 	  aqipid=$!
 	  echo "${aqipid}" > ${pidfile}
 	  echo -e "\n - AQI MONITOR SERVICE STARTED"
