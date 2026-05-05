@@ -12,21 +12,13 @@ complete -F _aqi_monitor aqi_monitor
 function aqi_monitor(){
 
 function sensor_online(){
-# Check device exists directly — dmesg check fails if sensor was present at boot
-local dev_port=""
-for candidate in /dev/ttyUSB0 /dev/ttyUSB1 /dev/myUSB; do
-    if [[ -e "${candidate}" ]]; then
-        dev_port="${candidate}"
-        break
-    fi
-done
-if [[ -z "${dev_port}" ]]; then
-    echo "ERROR:DEVICE NOT FOUND : SDS011 Particulate Matter Sensor"
-    return 2>/dev/null || exit
-fi
-echo " - SDS011 Particulate Matter Sensor CONNECTED : ${dev_port}"
-# Export for docker-compose device mapping if non-default path
-export SENSOR_DEV="${dev_port}"
+##[    8.518979] usb 1-1.4: ch341-uart converter now attached to ttyUSB0
+dev_check=$(dmesg | grep 'ch341-uart converter now attached to ttyUSB' | tail -n1 || echo "NULL")
+dev_port=$(grep -Eo 'ttyUSB[0-9]' <<< "${dev_check}")
+dev_connected=$(ls /dev/"${dev_port}" 2>/dev/null || { echo "false"; { return 2>dev/null || exit; } ; } )
+[[ "${dev_check:-NULL}" == "NULL" ]] && { echo "ERROR:DEVICE NOT FOUND : SDS011 Particulate Matter Sensor"; return 2>/dev/null || exit ; }
+
+echo " - SDS011 Particulate Matter Sensor CONNECTED : ${dev_connected}"
 }	# END OF sensor_online
 
 cd /home/pi/pi_air_quality_monitor || { return 2>/dev/null || exit;  }
