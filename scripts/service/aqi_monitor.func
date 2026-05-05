@@ -74,7 +74,6 @@ case $1 in
 	  tail -F ${log}
 	;;
 	api|json)
-	  [
 	  which jq 2>&1 >/dev/null && \
 		curl -s localhost:8000/api/ | jq . -c || \
 		curl -s localhost:8000/api/
