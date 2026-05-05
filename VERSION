@@ -1,0 +1,6 @@
+# pi_air_quality_monitor version
+# Format: MAJOR.MINOR.PATCH[-prerelease]
+# MAJOR - breaking API or deployment change
+# MINOR - new feature (kiosk, grafana endpoint, etc.)
+# PATCH - bug fix / config adjustment
+0.2.0-dev

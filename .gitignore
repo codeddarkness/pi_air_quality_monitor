@@ -1,3 +1,11 @@
 **/.DS_Store
 env
 *.pyc
+
+# Dev additions
+logs/
+*.log
+_local_data/
+json_data/
+data/redis/
+.env
