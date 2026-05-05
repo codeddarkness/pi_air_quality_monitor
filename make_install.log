@@ -1,0 +1,40 @@
+make[1]: Entering directory '/home/pi/pi_air_quality_monitor'
+Hit:1 http://deb.debian.org/debian bookworm InRelease
+Hit:2 http://deb.debian.org/debian-security bookworm-security InRelease
+Hit:3 https://download.docker.com/linux/debian bookworm InRelease
+Hit:4 http://deb.debian.org/debian bookworm-updates InRelease
+Hit:5 http://repository.netdata.cloud/repos/edge/debian bookworm/ InRelease
+Hit:6 http://archive.raspberrypi.com/debian bookworm InRelease
+Hit:8 http://repository.netdata.cloud/repos/repoconfig/debian bookworm/ InRelease
+Hit:9 http://packages.azlux.fr/debian bookworm InRelease
+Hit:7 https://packagecloud.io/ookla/speedtest-cli/debian bookworm InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python3 is already the newest version (3.11.2-1+b1).
+python3-pip is already the newest version (23.0.1+dfsg-1+rpt1).
+python3-dev is already the newest version (3.11.2-1+b1).
+libffi-dev is already the newest version (3.4.4-1).
+libssl-dev is already the newest version (3.0.19-1~deb12u2+rpt1).
+The following packages were automatically installed and are no longer required:
+  criu libintl-perl libintl-xs-perl libmodule-find-perl
+  libmodule-scandeps-perl libnet1 libproc-processtable-perl libprotobuf-c1
+  libsort-naturally-perl libterm-readkey-perl needrestart python3-protobuf
+  tightvncpasswd tini
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 497 not upgraded.
+# Executing docker install script, commit: 2687d91ddeb3bd6aeae37a90947761efdee87030
+Warning: the "docker" command appears to already exist on this system.
+
+If you already have Docker installed, this script can cause trouble, which is
+why we're displaying this warning and provide the opportunity to cancel the
+installation.
+
+If you installed the current Docker package using this script and are using it
+again to update Docker, you can ignore this message, but be aware that the
+script resets any custom changes in the deb and rpm repo configuration
+files to match the parameters passed to the script.
+
+You may press Ctrl+C now to abort this script.
++ sleep 20

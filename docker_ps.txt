@@ -1,0 +1,6 @@
+CONTAINER ID   IMAGE                                     COMMAND                  CREATED         STATUS                          PORTS                                         NAMES
+4237b667d3ee   dockpeek/dockpeek:latest                  "gunicorn -c gunicor…"   6 months ago    Up 30 minutes (healthy)         0.0.0.0:3420->8000/tcp, [::]:3420->8000/tcp   dockpeek
+770d54a45539   grafana/grafana-oss:latest                "/run.sh"                22 months ago   Up 30 minutes                   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp   grafana
+6fa882f23c2b   gcr.io/cadvisor/cadvisor:v0.47.0          "/usr/bin/cadvisor -…"   22 months ago   Up 30 minutes (unhealthy)       8080/tcp                                      cadvisor
+d3a1796df75d   prom/prometheus:v2.37.9                   "/bin/prometheus --c…"   22 months ago   Restarting (2) 43 seconds ago                                                 prometheus
+dd6aac589176   quay.io/prometheus/node-exporter:v1.5.0   "/bin/node_exporter …"   22 months ago   Up 30 minutes                   9100/tcp                                      node_exporter
