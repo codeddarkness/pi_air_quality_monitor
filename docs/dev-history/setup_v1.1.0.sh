@@ -55,7 +55,7 @@ ok "NOTICE written"
 
 # Update README with upstream credit section
 python3 - << 'PYEOF'
-path = "/home/pi/pi_air_quality_monitor/README.md"
+path = "${PAQM_DIR}/README.md"
 with open(path) as f:
     content = f.read()
 
@@ -100,7 +100,7 @@ Requires=docker.service
 Type=simple
 User=pi
 Group=docker
-WorkingDirectory=/home/pi/pi_air_quality_monitor
+WorkingDirectory=${PAQM_DIR}
 ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/docker-compose up
 ExecStop=/usr/bin/docker-compose down
@@ -129,7 +129,7 @@ BindsTo=paqm.service
 User=pi
 Environment=DISPLAY=:0
 Environment=XAUTHORITY=/home/pi/.Xauthority
-WorkingDirectory=/home/pi/pi_air_quality_monitor
+WorkingDirectory=${PAQM_DIR}
 # Wait for Flask to be ready before opening browser
 ExecStartPre=/bin/bash -c '\
   for i in $(seq 1 30); do \
@@ -138,15 +138,15 @@ ExecStartPre=/bin/bash -c '\
     sleep 3; \
   done; \
   echo "WARNING: API not ready after 90s, starting anyway"; exit 0'
-ExecStart=/home/pi/pi_air_quality_monitor/scripts/kiosk/start_firefox_kiosk.sh
+ExecStart=${PAQM_DIR}/scripts/kiosk/start_firefox_kiosk.sh
 ExecStop=/bin/bash -c "pkill -f start_firefox_kiosk.sh; killall firefox-esr 2>/dev/null; true"
 KillMode=mixed
 KillSignal=SIGTERM
 TimeoutStopSec=10
 Restart=on-failure
 RestartSec=10
-StandardOutput=append:/home/pi/pi_air_quality_monitor/logs/firefox-kiosk-systemd.log
-StandardError=append:/home/pi/pi_air_quality_monitor/logs/firefox-kiosk-systemd.log
+StandardOutput=append:${PAQM_DIR}/logs/firefox-kiosk-systemd.log
+StandardError=append:${PAQM_DIR}/logs/firefox-kiosk-systemd.log
 
 [Install]
 WantedBy=graphical.target

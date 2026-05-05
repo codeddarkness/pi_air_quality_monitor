@@ -11,3 +11,6 @@ data/redis/
 .env
 *.bak.*
 last_count.runs
+config.env
+firefox-esr-run.log
+lazy*.sh

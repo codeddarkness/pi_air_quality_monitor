@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Raspberry Pi Air Quality Monitor</title>
-    <!-- version: 0.2.1 -->
+    <!-- version: 1.2.0 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
@@ -36,16 +36,14 @@
         </div>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.2/chart.min.js"
     integrity="sha512-VCHVc5miKoln972iJPvkQrUYYq7XpxXzvqNfiul1H4aZDwGBGC0lq373KNleaB2LpnC2a/iNfE5zoRYmB4TRDQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 <script>
-const POLL_INTERVAL_MS = 60000; // matches sensor collection interval
+const POLL_MS = 60000;
 let chart = null;
 
 function buildDatasets(data) {
@@ -71,9 +69,7 @@ function initChart(data) {
                 x: { ticks: { color: '#8b949e', maxTicksLimit: 10 }, grid: { color: '#21262d' } },
                 y: { beginAtZero: true, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } }
             },
-            plugins: {
-                legend: { labels: { color: '#e6edf3' } }
-            }
+            plugins: { legend: { labels: { color: '#e6edf3' } } }
         }
     });
 }
@@ -82,32 +78,27 @@ function updateChart(data) {
     if (!chart) { initChart(data); return; }
     const ds = buildDatasets(data);
     chart.data.labels = ds.labels;
-    chart.data.datasets.forEach((dataset, i) => {
-        dataset.data = ds.datasets[i].data;
-    });
+    chart.data.datasets.forEach((d, i) => { d.data = ds.datasets[i].data; });
     chart.update();
 }
 
-function setStatus(text, ok) {
+function setStatus(text, good) {
     document.getElementById('status-text').textContent = text;
-    document.getElementById('status-dot').style.background = ok ? '#3fb950' : '#f85149';
+    document.getElementById('status-dot').style.background = good ? '#3fb950' : '#f85149';
 }
 
 function fetchAndUpdate() {
     $.getJSON('/api/')
         .done(function(data) {
             updateChart(data);
-            const latest = data.historical.labels.slice(-1)[0] || '—';
-            setStatus('Last reading: ' + latest + ' · next update in 60s', true);
+            const latest = data.historical.labels.slice(-1)[0] || '--';
+            setStatus('Last reading: ' + latest + ' · updates every 60s', true);
         })
-        .fail(function() {
-            setStatus('API unreachable — retrying...', false);
-        });
+        .fail(function() { setStatus('API unreachable -- retrying...', false); });
 }
 
-// Initial load then poll
 fetchAndUpdate();
-setInterval(fetchAndUpdate, POLL_INTERVAL_MS);
+setInterval(fetchAndUpdate, POLL_MS);
 </script>
 </body>
 </html>

@@ -28,7 +28,7 @@ cp "${FUNC}" "${FUNC}.bak.$(date +%Y%m%d%H%M%S)"
 python3 - << 'PYEOF'
 import re, sys
 
-path = "/home/pi/pi_air_quality_monitor/scripts/service/aqi_monitor.func"
+path = "${PAQM_DIR}/scripts/service/aqi_monitor.func"
 with open(path) as f:
     content = f.read()
 
@@ -86,9 +86,9 @@ ok "Symlink: ${FUNC_ROOT} -> ${FUNC}"
 log "Updating crontab..."
 CURRENT_CRON=$(crontab -l 2>/dev/null || true)
 NEW_CRON=$(echo "${CURRENT_CRON}" | sed \
-    -e 's|/home/pi/pi_air_quality_monitor/aqi_monitor.func|/home/pi/pi_air_quality_monitor/scripts/service/aqi_monitor.func|g' \
-    -e 's|/home/pi/pi_air_quality_monitor/run_reformatter.sh|/home/pi/pi_air_quality_monitor/scripts/data/run_reformatter.sh|g' \
-    -e 's|/home/pi/pi_air_quality_monitor/reset_counter.sh|/home/pi/pi_air_quality_monitor/scripts/service/reset_counter.sh|g'
+    -e 's|${PAQM_DIR}/aqi_monitor.func|${PAQM_DIR}/scripts/service/aqi_monitor.func|g' \
+    -e 's|${PAQM_DIR}/run_reformatter.sh|${PAQM_DIR}/scripts/data/run_reformatter.sh|g' \
+    -e 's|${PAQM_DIR}/reset_counter.sh|${PAQM_DIR}/scripts/service/reset_counter.sh|g'
 )
 echo "${NEW_CRON}" | crontab -
 ok "Crontab updated"

@@ -181,5 +181,5 @@ echo
 echo "  Network endpoints (when running):"
 echo "    Local kiosk  : http://localhost:8000"
 echo "    Network      : http://$(hostname -I | awk '{print $1}'):8000"
-echo "    Grafana      : http://10.0.0.194:3000"
+echo "    Grafana      : http://<PI_IP_ADDRESS>:3000"
 echo "======================================================================"

@@ -40,7 +40,7 @@ PartOf=paqm.service
 [Service]
 User=pi
 Environment=DISPLAY=:0
-ExecStart=/home/pi/pi_air_quality_monitor/start_firefox_kiosk.sh
+ExecStart=${PAQM_DIR}/start_firefox_kiosk.sh
 ExecStop=/bin/bash -c "pkill -f start_firefox_kiosk.sh; killall firefox-esr"
 KillMode=mixed
 KillSignal=SIGTERM

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-runlog=/home/pi/pi_air_quality_monitor/firefox-esr-run.log
+runlog=${PAQM_DIR}/firefox-esr-run.log
 DISPLAY=:0
 export DISPLAY
 function message(){
