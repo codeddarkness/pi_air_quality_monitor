@@ -1,0 +1,23 @@
+pi_air_quality_monitor
+Copyright (c) codeddarkness
+https://github.com/codeddarkness/pi_air_quality_monitor
+
+This project is a fork/mirror of:
+
+  pi_air_quality_monitor
+  Copyright (c) rydercalmdown
+  https://github.com/rydercalmdown/pi_air_quality_monitor
+
+The original project provided the core Flask + Redis + Docker architecture,
+SDS011 sensor integration, Chart.js web interface, and APScheduler data
+collection loop. This fork adds:
+
+  - Auto-refresh chart UI (60s polling, dark theme)
+  - Reliable sensor detection (/dev/ttyUSBx direct check)
+  - Systemd service units for autostart (paqm + firefox kiosk)
+  - Structured script layout (scripts/kiosk, scripts/data, scripts/service)
+  - install.sh for reproducible fresh deployments
+  - Versioning, CHANGELOG, and validation tooling
+
+Original license applies to all upstream code. See LICENSE if present in
+the upstream repository.

@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.0-dev] - 2026-05-05
+### Added
+- NOTICE file with upstream attribution to rydercalmdown/pi_air_quality_monitor
+- README: upstream credit section with link to original project
+- systemd/paqm.service: docker-compose stack with After=docker.service
+- systemd/firefox-kiosk.service: kiosk After=paqm.service with API health check
+- ExecStartPre health check loop: waits up to 90s for Flask API before opening browser
+
+### Fixed
+- Boot autostart: replaced racy @reboot crontab with ordered systemd units
+  (crontab fires before Docker daemon ready; systemd Requires= prevents this)
+- firefox-kiosk: was opening localhost:8000 before Flask was serving requests
+
+### Changed
+- @reboot crontab entries commented out (paqm.service takes over)
+
+
 ## [1.0.0] - 2026-05-05
 ### Fixed
 - sensor_online(): direct /dev/ttyUSBx check instead of dmesg-only

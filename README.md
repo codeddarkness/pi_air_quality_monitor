@@ -189,6 +189,19 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ---
 
+
+## Upstream / Credits
+
+This project is a fork of [rydercalmdown/pi_air_quality_monitor](https://github.com/rydercalmdown/pi_air_quality_monitor).
+
+The original work provides the Flask + Redis + Docker stack, SDS011 sensor
+integration via `sds011lib`, Chart.js web interface, and APScheduler-based
+data collection. All upstream code retains its original authorship.
+
+**Changes in this fork** are documented in [CHANGELOG.md](CHANGELOG.md)
+and [NOTICE](NOTICE).
+
+---
 ## Known Issues / Roadmap (v1.1.0)
 
 - [ ] Migrate `docker-compose` (v1.29.2) → `docker compose` (V2 plugin)

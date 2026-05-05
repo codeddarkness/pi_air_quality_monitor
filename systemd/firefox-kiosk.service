@@ -1,0 +1,33 @@
+# firefox-kiosk.service v1.1.0
+# Opens Firefox ESR in kiosk mode after paqm stack is healthy
+[Unit]
+Description=Firefox Kiosk — AQI Monitor display
+After=graphical.target paqm.service
+Wants=graphical.target
+BindsTo=paqm.service
+
+[Service]
+User=pi
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/pi/.Xauthority
+WorkingDirectory=/home/pi/pi_air_quality_monitor
+# Wait for Flask to be ready before opening browser
+ExecStartPre=/bin/bash -c '\
+  for i in $(seq 1 30); do \
+    curl -sf http://localhost:8000/api/ >/dev/null 2>&1 && exit 0; \
+    echo "Waiting for AQI API... attempt $i"; \
+    sleep 3; \
+  done; \
+  echo "WARNING: API not ready after 90s, starting anyway"; exit 0'
+ExecStart=/home/pi/pi_air_quality_monitor/scripts/kiosk/start_firefox_kiosk.sh
+ExecStop=/bin/bash -c "pkill -f start_firefox_kiosk.sh; killall firefox-esr 2>/dev/null; true"
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/home/pi/pi_air_quality_monitor/logs/firefox-kiosk-systemd.log
+StandardError=append:/home/pi/pi_air_quality_monitor/logs/firefox-kiosk-systemd.log
+
+[Install]
+WantedBy=graphical.target
