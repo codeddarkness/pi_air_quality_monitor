@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0-dev] - 2026-05-05
+## [1.1.0] - 2026-05-05
 ### Added
 - NOTICE file with upstream attribution to rydercalmdown/pi_air_quality_monitor
 - README: upstream credit section with link to original project
