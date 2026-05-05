@@ -1,4 +1,4 @@
-# firefox-kiosk.service v1.1.1
+# firefox-kiosk.service v1.2.1
 [Unit]
 Description=Firefox Kiosk — AQI Monitor display
 After=graphical.target paqm.service

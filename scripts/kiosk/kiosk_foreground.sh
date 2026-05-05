@@ -7,7 +7,7 @@ DISPLAY="${DISPLAY:-:0}"
 export DISPLAY
 export XAUTHORITY="${XAUTHORITY:-/home/pi/.Xauthority}"
 URL="http://localhost:8000"
-LOG="${PAQM_DIR}/logs/firefox-kiosk.log"
+LOG="${REPO_DIR}/logs/firefox-kiosk.log"
 
 mkdir -p "$(dirname "${LOG}")"
 
