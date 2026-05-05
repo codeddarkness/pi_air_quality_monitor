@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# install.sh v1.0.0
+# install.sh v1.2.1
 # Fresh deployment installer for pi_air_quality_monitor
 # Tested on Raspberry Pi OS Bookworm (Debian 12)
 # Usage: bash install.sh
@@ -11,7 +11,7 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 log() { echo -e "[\033[0;36m$(date +%H:%M:%S)\033[0m] $*"; }
 ok()  { echo -e "  [\033[0;32mOK\033[0m] $*"; }
 
-log "pi_air_quality_monitor installer v1.0.0"
+log "pi_air_quality_monitor installer v1.2.1"
 
 # ── System dependencies ───────────────────────────────────────
 log "Installing system packages..."

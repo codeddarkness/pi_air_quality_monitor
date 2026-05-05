@@ -12,7 +12,7 @@ served via Flask + Redis + Docker with an auto-refreshing web interface.
 
 | Branch | Status | Description |
 |--------|--------|-------------|
-| `main` | ✅ stable | Production deployment — v1.0.0 |
+| `main` | ✅ stable | Production deployment — v1.2.1 |
 | `custom_dev` | 🔧 active dev | Feature development and fixes |
 
 ---
@@ -110,7 +110,7 @@ SDS011 Sensor
     │ /dev/ttyUSB0
     ▼
 ┌─────────────────────────────────────┐
-│  Docker (docker-compose)            │
+│  Docker (docker compose V2)         │
 │  ┌─────────────┐  ┌──────────────┐ │
 │  │ web          │  │ redis        │ │
 │  │ Flask :8000  │◄─│ :6379        │ │
@@ -133,7 +133,7 @@ pi_air_quality_monitor/
 │   ├── app.py                  Flask app + API routes
 │   ├── AirQualityMonitor.py    SDS011 sensor + Redis interface
 │   ├── requirements.txt
-│   └── templates/index.html   Auto-refresh chart UI (v0.2.1)
+│   └── templates/index.html   Auto-refresh chart UI (v1.2.0)
 ├── scripts/
 │   ├── service/
 │   │   ├── aqi_monitor.func   Shell functions: start/stop/status/api
@@ -164,13 +164,16 @@ pi_air_quality_monitor/
 
 ## Autostart on Boot
 
-The `@reboot` crontab entry (set by `install.sh`) starts the service automatically:
+Autostart is handled by systemd (configured by `install.sh`):
 
 ```
-@reboot ${PAQM_DIR}/scripts/service/aqi_monitor.func start 2>/dev/null
+sudo systemctl enable paqm.service firefox-kiosk.service
 ```
 
-For systemd-based autostart see `systemd/paqm.service` (v1.1.0 target).
+- `paqm.service` — starts the docker compose stack after Docker is ready
+- `firefox-kiosk.service` — opens kiosk browser after Flask API is healthy
+
+Check status: `sudo systemctl status paqm.service firefox-kiosk.service`
 
 ---
 
@@ -203,10 +206,18 @@ data collection. All upstream code retains its original authorship.
 and [NOTICE](NOTICE).
 
 ---
-## Known Issues / Roadmap (v1.1.0)
+## Endpoints
 
-- [ ] Migrate `docker-compose` (v1.29.2) → `docker compose` (V2 plugin)
-- [ ] Wire `systemd/paqm.service` for reliable boot ordering
-- [ ] Wire `scripts/kiosk/start_firefox_kiosk.sh` to systemd for kiosk autostart
-- [ ] Persist Redis data across clean restarts (currently lost on `docker-compose down`)
-- [ ] Add Prometheus `/metrics` endpoint for native Grafana scraping
+| URL | Description |
+|-----|-------------|
+| `http://<pi-ip>:8000/` | Live chart UI (auto-refreshes every 60s) |
+| `http://<pi-ip>:8000/api/` | Historical readings (last 30, JSON) |
+| `http://<pi-ip>:8000/api/now/` | Single live reading (JSON) |
+| `http://<pi-ip>:8000/metrics` | Prometheus text format scrape target |
+
+## Roadmap (v1.3.0)
+
+- [ ] Grafana dashboard JSON export for one-click import
+- [ ] Persist Grafana dashboards across container restarts
+- [ ] Alert threshold config in config.env (notify when AQI exceeds N)
+- [ ] Historical data export endpoint (/api/export.csv)

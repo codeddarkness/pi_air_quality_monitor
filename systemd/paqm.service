@@ -1,4 +1,4 @@
-# paqm.service v1.1.1
+# paqm.service v1.2.1
 [Unit]
 Description=Pi Air Quality Monitor (docker-compose stack)
 After=network-online.target docker.service
@@ -13,10 +13,10 @@ Group=docker
 WorkingDirectory=${PAQM_DIR}
 # Create log dir before docker-compose tries to write
 ExecStartPre=/bin/mkdir -p /tmp/sensor_logs
-ExecStartPre=/usr/bin/docker-compose down
+ExecStartPre=/usr/bin/docker compose -p pi_air_quality_monitor down --remove-orphans
 ExecStartPre=/bin/sleep 5
-ExecStart=/usr/bin/docker-compose up
-ExecStop=/usr/bin/docker-compose down
+ExecStart=/usr/bin/docker compose -p pi_air_quality_monitor up
+ExecStop=/usr/bin/docker compose -p pi_air_quality_monitor down
 Restart=on-failure
 RestartSec=15
 StandardOutput=append:/tmp/sensor_logs/paqm-systemd.log

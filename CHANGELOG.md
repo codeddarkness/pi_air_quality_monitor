@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.1] - 2026-05-05
+### Fixed
+- README: branches table version 1.0.0 -> 1.2.1, layout tree template version,
+  architecture diagram text, autostart section updated to reflect systemd,
+  roadmap updated with completed items removed
+- systemd/paqm.service: updated to docker compose V2 (was still docker-compose V1)
+- systemd/firefox-kiosk.service: version tag updated to v1.2.1
+- install.sh: version header updated to v1.2.1
+- scripts/kiosk/kiosk_foreground.sh: log path uses REPO_DIR (self-resolving),
+  not PAQM_DIR (which may be unset at kiosk start time)
+- scripts/data/run_reformatter.sh: paths self-resolving via BASH_SOURCE,
+  no longer depends on PAQM_DIR being set in cron environment
+- .gitignore: removed duplicate entries
+
+
 ## [1.2.0] - 2026-05-05
 ### Added
 - config.env.example: deployment configuration template (committed)
