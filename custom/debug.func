@@ -1,0 +1,31 @@
+function range_debug(){
+mkdir -p logs
+touch logs/check_ranges-debug.log
+cat << EDBG >> logs/check_ranges-debug.log
+string1         ${string1:-NULL}
+string2         ${string2:-NULL}
+StartDate       ${StartDate:-NULL}
+FinalDate       ${FinalDate:-NULL}
+StartDate       ${StartDate:-NULL}
+FinaleDate      ${FinaleDate:-NULL}
+secs            ${secs:-NULL}
+mins            ${mins:-NULL}
+hours           ${hours:-NULL}
+days            ${days:-NULL}
+weeks           ${weeks:-NULL}
+months          ${months:-NULL}
+years           ${years:-NULL}
+timestamp_data  ${timestamp_data:-NULL}
+aqi_data        ${aqi_data:-NULL}
+pm2_data        ${pm2_data:-NULL}
+pm10_data       ${pm10_data:-NULL}
+data_name       ${data_name:-NULL}
+data_set        ${data_set:-NULL}
+data_count      ${data_count:-NULL}
+data_min        ${data_min:-NULL}
+data_max        ${data_max:-NULL}
+data_array      ${data_array:-NULL}
+time_stats      ${time_stats:-NULL}
+
+EDBG
+}

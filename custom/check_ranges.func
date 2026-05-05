@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+function calc_time_between(){
+string1="${1:-2024-07-03T09:07:44-06:00}"
+string2="${2:-2024-08-02T11:59:20-06:00}"
+StartDate=$(date -u -d "${string1}" +"%s")
+FinalDate=$(date -u -d "${string2}" +"%s")
+if [[ "${FinalDate}" -eq "${StartDate}" ]]; then
+	echo " - DATES CANNOT BE THE SAME ${string1} : ${string2}"
+	return 2>/dev/null || exit
+elif [[ "${FinalDate}" -lt "${StartDate}" ]]; then
+	StartDate=$(date -u -d "${string2}" +"%s")
+	FinaleDate=$(date -u -d "${string1}" +"%s")
+	echo "$StartDate $FinalDate"
+fi	
+secs=$((FinalDate-StartDate))
+
+mins=$((secs/60))
+hours=$((mins/60))
+days=$((hours/24))
+weeks=$((days/7))
+months=$((days/28))
+years=$((days/365))
+
+echo -e "
+\"date_range\" : { 
+\"start_date\" : \"${string1}\" , 
+\"end_date\" : \"${string2}\" } ,
+\"seconds\" : ${secs} ,
+\"minutes\" : ${mins} ,
+\"hours\" : ${hours} , 
+\"days\" : ${days} ,
+\"weeks\" : ${weeks} ,
+\"months\" : ${months} ,
+\"years\" : ${years} } "
+}
+
+function check_ranges(){
+cd /home/pi/pi_air_quality_monitor || exit
+
+timestamp_data=$(jq '.[].data' aqi_data.json | grep timestamp |  sed 's/^\s*//g' | sort -uV | cut -d: -f2- | sed 's/,$//g' | sed 's/^\s*//g')
+aqi_data=$(jq '.[].data' aqi_data.json | grep aqi |  sed 's/^\s*//g' | sort -uV | cut -d: -f2 | sed 's/,$//g' | sed 's/^\s*//g')
+pm2_data=$(jq '.[].data' aqi_data.json | grep pm2 |  sed 's/^\s*//g' | sort -uV | cut -d: -f2 | sed 's/,$//g' | sed 's/^\s*//g')
+pm10_data=$(jq '.[].data' aqi_data.json | grep pm10 |  sed 's/^\s*//g' | sort -uV | cut -d: -f2 | sed 's/,$//g' | sed 's/^\s*//g')
+
+function object_as_json(){
+data_name=$1
+data_set=${2}
+data_count=$(wc -l <<< "${data_set}")
+data_min=$(head -n1 <<< "${data_set}")
+data_max=$(tail -n1 <<< "${data_set}")
+data_array=$(xargs <<< "${data_set}" | sed 's/ /, /g')
+if [[ "${data_name}" == "timestamp" ]] ; then
+	#echo -e "{ \"${data_name}_range\" : { \"events\" : ${data_count} , \"start_time\" : ${data_min} , \"end_time\" : ${data_max} } }" | jq -c
+	time_stats=$(calc_time_between "${start_time}" "${end_time}")
+	echo -e "{ \"${data_name}_status\" : { \"events\" : ${data_count} , ${time_stats} }" | jq 2>&1 >/dev/null || { echo " - malformed json" ; return 2>/dev/null || exit; }
+	echo -e "{ \"${data_name}_status\" : { \"events\" : ${data_count} , ${time_stats} }" | jq -c
+else
+	echo -e "{ \"${data_name}\" : { \"count\" : ${data_count} , \"min\" : ${data_min} , \"max\" : ${data_max}, \"array\" : [ ${data_array} ] } }" | jq -c
+fi
+}
+
+case $1 in
+	timestamp|ts)
+	object_as_json timestamp "${timestamp_data}"
+	;;
+	aqi)
+	object_as_json aqi "${aqi_data}"
+	;;
+	pm2)
+	object_as_json pm2 "${pm2_data}"
+	;;
+	pm10)
+	object_as_json pm10 "${pm10_data}"
+	;;
+	*)
+	object_as_json timestamp "${timestamp_data}"
+	object_as_json aqi "${aqi_data}"
+	object_as_json pm2 "${pm2_data}"
+	object_as_json pm10 "${pm10_data}"
+	#for x in timestamp aqi pm2 pm10; do
+	#	eval object_as_json ${x} "\${${x}_data}"
+	#done
+	;;
+
+esac
+if [[ "$(grep -o '\-debug' <<< "${@}")" == "-debug" ]] ; then
+	if [[ -e "debug.func" ]] ; then
+		source debug.func
+		range_debug
+	fi
+fi
+}
+export -f check_ranges

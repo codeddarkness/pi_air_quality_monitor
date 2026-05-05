@@ -1,0 +1,16 @@
+[Unit]
+Description=Pi Air Quality Monitor Service
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/pi_air_quality_monitor
+ExecStart=/home/pi/pi_air_quality_monitor/paqm start
+ExecStop=/home/pi/pi_air_quality_monitor/paqm stop
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

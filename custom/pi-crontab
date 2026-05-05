@@ -1,0 +1,31 @@
+# Edit this file to introduce tasks to be run by cron.
+# 
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+# 
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').
+# 
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+# 
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+# 
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+# 
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# m h  dom mon dow   command
+@reboot			/home/pi/pi_air_quality_monitor/aqi_monitor.func start 2>/dev/null
+@reboot			/home/pi/pi_air_quality_monitor/reset_counter.sh
+*/15 * * * * 		bash /home/pi/pi_air_quality_monitor/run_reformatter.sh
+
+#*/5 * * * * 		((date; echo -en "[collect]") | xargs ; /home/pi/_all_sensors/collect_stats.sh collect) >> /tmp/sensor_logs/all_sensors_collect_stats.log
+#*/15 * * * * 		((date; echo -en "[update]") | xargs ; /home/pi/_all_sensors/collect_stats.sh update) >> /tmp/sensor_logs/all_sensors_collect_stats.log
+#*/10 * * * * 		(date; /home/pi/_weather_parser/show_json_weather.sh) > /tmp/sensor_logs/weather_parser_show_json.log
+#*/10 * * * * 		(date; /home/pi/more_weather/json_weather.py) > /tmp/sensor_logs/more_weather_json.log

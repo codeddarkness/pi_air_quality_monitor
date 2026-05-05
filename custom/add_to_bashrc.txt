@@ -1,0 +1,8 @@
+
+if [ -f ~/pi_air_quality_monitor/aqi_monitor.func ] ; then
+        source ~/pi_air_quality_monitor/aqi_monitor.func
+        if [ -f ~/custom_functions.func ]; then
+                source ~/custom_functions.func
+        fi
+        export PATH=$PATH:/home/pi/pi_air_quality_monitor
+fi
