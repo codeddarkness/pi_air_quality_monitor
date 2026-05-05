@@ -1,0 +1,43 @@
+# Changelog
+
+## [1.0.0] - 2026-05-05
+### Fixed
+- sensor_online(): direct /dev/ttyUSBx check instead of dmesg-only
+- aqi_monitor.func log redirect (double > redirect silenced all output)
+- Path migration: custom/ → scripts/{kiosk,data,service}/
+- Crontab and .bashrc updated to new script paths
+- Backward-compat symlink at repo root for aqi_monitor.func
+
+### Added
+- Auto-refresh chart (60s polling, no page reload) — index.html v0.2.1
+- Dark theme UI with live status indicator
+- install.sh for fresh deployments
+- VERSION and CHANGELOG.md with semantic versioning
+- docs/diagnostics/ for deployment logs
+
+### Architecture
+- Flask + Redis + docker-compose stack unchanged
+- SDS011 sensor via /dev/ttyUSB0 → docker device passthrough
+- API: /api/ (historical), /api/now/ (live), /  (chart UI)
+- Grafana compatible via HTTP data source at :8000/api/
+
+
+## [Unreleased] - 0.2.0-dev
+### Added
+- `custom_dev` branch for structured re-implementation
+- `scripts/kiosk/` — Firefox ESR kiosk scripts (migrated from custom/)
+- `scripts/data/` — data collection, reformat, and API scripts
+- `scripts/service/` — install, aqi_monitor.func, crontab
+- `systemd/` — unit files for review and deployment
+- `docs/diagnostics/` — make_install.log, make_run.log, docker_ps.txt
+
+### Known Issues (to fix)
+- docker-compose v1.29.2 ContainerConfig KeyError → migrate to `docker compose` (V2 plugin)
+- Data refresh stale in browser → reformat_aqi_data.sh cron reliability
+- Kiosk start order race (Firefox before docker stack is ready)
+- Redis data not persisted across restarts on clean run
+
+## [0.1.0] - initial mirror
+### Added
+- Mirror of rydercalmdown/pi_air_quality_monitor
+- custom/ directory with previous deployment scripts
