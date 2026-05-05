@@ -42,8 +42,8 @@ ok "last_count.runs removed from tracking"
 log "Updating Makefile..."
 cat > Makefile << 'MAKEEOF'
 # pi_air_quality_monitor Makefile v1.0.1
-PI_IP_ADDRESS=10.0.0.194
-PI_USERNAME=pi
+PI_IP_ADDRESS=<PI_IP_ADDRESS>
+PI_USERNAME=${PAQM_USER}
 
 .PHONY: run stop restart status build install validate copy shell log api
 
@@ -167,7 +167,7 @@ make api       # curl /api/ with JSON formatting
 | `http://<pi-ip>:8000/api/` | Historical readings (last 30, JSON) |
 | `http://<pi-ip>:8000/api/now/` | Single live reading (JSON) |
 
-Default Pi IP on this deployment: **10.0.0.194**
+Default Pi IP on this deployment: **<PI_IP_ADDRESS>**
 
 ---
 
@@ -191,11 +191,11 @@ EPA threshold for "Good" is AQI ≤ 50 (PM2.5 ≤ 12 µg/m³).
 
 ## Grafana Integration
 
-Add an HTTP data source in Grafana pointing to `http://10.0.0.194:8000/api/`
+Add an HTTP data source in Grafana pointing to `http://<PI_IP_ADDRESS>:8000/api/`
 and use the JSON fields `historical.aqi.data`, `historical.pm10.data`,
 `historical.pm2.data` with `historical.labels` as the time axis.
 
-Grafana is running on this host at `http://10.0.0.194:3000`.
+Grafana is running on this host at `http://<PI_IP_ADDRESS>:3000`.
 
 ---
 
@@ -263,7 +263,7 @@ pi_air_quality_monitor/
 The `@reboot` crontab entry (set by `install.sh`) starts the service automatically:
 
 ```
-@reboot /home/pi/pi_air_quality_monitor/scripts/service/aqi_monitor.func start 2>/dev/null
+@reboot ${PAQM_DIR}/scripts/service/aqi_monitor.func start 2>/dev/null
 ```
 
 For systemd-based autostart see `systemd/paqm.service` (v1.1.0 target).

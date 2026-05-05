@@ -10,7 +10,7 @@ Environment=COMPOSE_PROJECT_NAME=pi_air_quality_monitor
 Type=simple
 User=pi
 Group=docker
-WorkingDirectory=/home/pi/pi_air_quality_monitor
+WorkingDirectory=${PAQM_DIR}
 # Create log dir before docker-compose tries to write
 ExecStartPre=/bin/mkdir -p /tmp/sensor_logs
 ExecStartPre=/usr/bin/docker-compose down

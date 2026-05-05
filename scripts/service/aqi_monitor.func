@@ -25,11 +25,11 @@ if [[ -z "${dev_port}" ]]; then
     return 2>/dev/null || exit
 fi
 echo " - SDS011 Particulate Matter Sensor CONNECTED : ${dev_port}"
-# Export for docker-compose device mapping if non-default path
+# Export for docker compose device mapping if non-default path
 export SENSOR_DEV="${dev_port}"
 }	# END OF sensor_online
 
-cd /home/pi/pi_air_quality_monitor || { return 2>/dev/null || exit;  }
+cd ${PAQM_DIR} || { return 2>/dev/null || exit;  }
 log=/tmp/sensor_logs/aqi_monitor.log
 mkdir -p /tmp/sensor_logs
 touch ${log}
@@ -47,14 +47,14 @@ case $1 in
 	  sensor_online
 	  [[ -n "${is_running}" ]] && { already_running ; return 2>/dev/null || exit ; }
 	  sleep 20
-	  nohup docker-compose up >> ${log} 2>&1 & 
+	  nohup docker compose up >> ${log} 2>&1 & 
 	  aqipid=$!
 	  echo "${aqipid}" > ${pidfile}
 	  echo -e "\n - AQI MONITOR SERVICE STARTED"
 	;;
 	stop)
 	  docker ps | grep 'pi_air_quality_monitor' 2>&1 >/dev/null || { echo " - service not running"; return 2>/dev/null || exit ; }
-	  docker-compose down
+	  docker compose down
 	  rm ${pidfile} 2>/dev/null
 	;;
 	status)

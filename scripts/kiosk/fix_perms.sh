@@ -16,7 +16,7 @@ echo "Fixing Firefox Kiosk Permissions"
 echo "=============================="
 
 # Update script to use a log file in the home directory
-SCRIPT_PATH="/home/pi/pi_air_quality_monitor/start_firefox_kiosk.sh"
+SCRIPT_PATH="${PAQM_DIR}/start_firefox_kiosk.sh"
 SCRIPT_BACKUP="${SCRIPT_PATH}.bak.$(date +%Y%m%d%H%M%S)"
 
 # Backup the current script
@@ -24,8 +24,8 @@ cp "${SCRIPT_PATH}" "${SCRIPT_BACKUP}"
 echo "Created backup at: ${SCRIPT_BACKUP}"
 
 # Create logs directory if it doesn't exist
-mkdir -p /home/pi/pi_air_quality_monitor/logs
-chown -R pi:pi /home/pi/pi_air_quality_monitor/logs
+mkdir -p ${PAQM_DIR}/logs
+chown -R pi:pi ${PAQM_DIR}/logs
 
 # Update the script
 echo "Updating kiosk script to use proper log path..."
@@ -39,7 +39,7 @@ cat > "${SCRIPT_PATH}" << 'EOF'
 # Configuration
 KIOSK_URL="localhost:8000"
 REFRESH_INTERVAL=60
-LOG_DIR="/home/pi/pi_air_quality_monitor/logs"
+LOG_DIR="${PAQM_DIR}/logs"
 LOG_FILE="${LOG_DIR}/firefox-kiosk.log"
 DISPLAY=":0"
 
@@ -157,8 +157,8 @@ Conflicts=paqm-browser.service
 User=pi
 Group=pi
 Environment=DISPLAY=:0
-WorkingDirectory=/home/pi/pi_air_quality_monitor
-ExecStart=/home/pi/pi_air_quality_monitor/start_firefox_kiosk.sh
+WorkingDirectory=${PAQM_DIR}
+ExecStart=${PAQM_DIR}/start_firefox_kiosk.sh
 ExecStop=/bin/bash -c "pkill -f start_firefox_kiosk.sh; killall firefox-esr"
 KillMode=mixed
 KillSignal=SIGTERM
@@ -182,7 +182,7 @@ echo "=============================="
 echo "Firefox kiosk permissions fixed!"
 echo
 echo "Changes made:"
-echo "- Updated script to use log file in: /home/pi/pi_air_quality_monitor/logs/"
+echo "- Updated script to use log file in: ${PAQM_DIR}/logs/"
 echo "- Created and set permissions on logs directory"
 echo "- Updated service file with proper permissions"
 echo "- Restarted the service"
@@ -191,7 +191,7 @@ echo "You can check the status with:"
 echo "  sudo systemctl status firefox-kiosk.service"
 echo
 echo "You can view logs with:"
-echo "  less /home/pi/pi_air_quality_monitor/logs/firefox-kiosk.log"
+echo "  less ${PAQM_DIR}/logs/firefox-kiosk.log"
 echo "=============================="
 
 exit 0

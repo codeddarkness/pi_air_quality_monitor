@@ -6,9 +6,9 @@ Requires=docker.service
 [Service]
 Type=simple
 User=pi
-WorkingDirectory=/home/pi/pi_air_quality_monitor
-ExecStart=/home/pi/pi_air_quality_monitor/paqm start
-ExecStop=/home/pi/pi_air_quality_monitor/paqm stop
+WorkingDirectory=${PAQM_DIR}
+ExecStart=${PAQM_DIR}/paqm start
+ExecStop=${PAQM_DIR}/paqm stop
 Restart=on-failure
 RestartSec=10
 

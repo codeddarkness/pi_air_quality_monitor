@@ -1,20 +1,32 @@
-version: "3.4"
+# docker-compose.yaml v1.2.0
 services:
   redis:
-    image: redis
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --save 60 1 --save 300 10 --appendonly yes
     volumes:
-      - ./data/redis:/data
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
   web:
     build: .
     image: pi-air-quality-monitor
+    restart: unless-stopped
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     environment:
-        - REDIS_HOST=redis
-        - PORT=8000
+      - REDIS_HOST=redis
+      - PORT=${PAQM_PORT:-8000}
     volumes:
       - ./src:/code
     depends_on:
-      - "redis"
+      redis:
+        condition: service_healthy
     ports:
-      - "8000:8000"
+      - "${PAQM_PORT:-8000}:${PAQM_PORT:-8000}"
+volumes:
+  redis_data:
+    driver: local
