@@ -74,7 +74,7 @@ case $1 in
 	  tail -F ${log}
 	;;
 	api|json)
-	  [[ -z "${is_running}" || ! -e "${pidfile}" ]] && { echo " - api service not running [ localhost:8000/api/ ]"; return 2>/dev/null || exit ; }
+	  [
 	  which jq 2>&1 >/dev/null && \
 		curl -s localhost:8000/api/ | jq . -c || \
 		curl -s localhost:8000/api/
