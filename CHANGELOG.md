@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.0.0] - 2026-05-05
+### Fixed
+- sensor_online(): direct /dev/ttyUSBx check instead of dmesg-only
+- aqi_monitor.func log redirect (double > redirect silenced all output)
+- Path migration: custom/ → scripts/{kiosk,data,service}/
+- Crontab and .bashrc updated to new script paths
+- Backward-compat symlink at repo root for aqi_monitor.func
+
+### Added
+- Auto-refresh chart (60s polling, no page reload) — index.html v0.2.1
+- Dark theme UI with live status indicator
+- install.sh for fresh deployments
+- VERSION and CHANGELOG.md with semantic versioning
+- docs/diagnostics/ for deployment logs
+
+### Architecture
+- Flask + Redis + docker-compose stack unchanged
+- SDS011 sensor via /dev/ttyUSB0 → docker device passthrough
+- API: /api/ (historical), /api/now/ (live), /  (chart UI)
+- Grafana compatible via HTTP data source at :8000/api/
+
+
 ## [Unreleased] - 0.2.0-dev
 ### Added
 - `custom_dev` branch for structured re-implementation
