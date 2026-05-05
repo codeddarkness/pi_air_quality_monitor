@@ -29,7 +29,7 @@ echo " - SDS011 Particulate Matter Sensor CONNECTED : ${dev_port}"
 export SENSOR_DEV="${dev_port}"
 }	# END OF sensor_online
 
-cd ${PAQM_DIR} || { return 2>/dev/null || exit;  }
+[[ -n "${PAQM_DIR}" ]] && pushd "${PAQM_DIR}" > /dev/null 2>&1 || cd ~/pi_air_quality_monitor
 log=/tmp/sensor_logs/aqi_monitor.log
 mkdir -p /tmp/sensor_logs
 touch ${log}

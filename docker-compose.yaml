@@ -6,6 +6,8 @@ services:
     command: redis-server --save 60 1 --save 300 10 --appendonly yes
     volumes:
       - redis_data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -22,6 +24,8 @@ services:
       - PORT=${PAQM_PORT:-8000}
     volumes:
       - ./src:/code
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     depends_on:
       redis:
         condition: service_healthy
