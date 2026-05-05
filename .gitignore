@@ -10,3 +10,4 @@ json_data/
 data/redis/
 .env
 *.bak.*
+last_count.runs
