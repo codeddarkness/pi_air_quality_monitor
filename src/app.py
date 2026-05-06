@@ -24,7 +24,7 @@ def reconfigure_data(measurement):
     measurement = list(reversed(measurement[:30]))
     return {
         'labels': pretty_timestamps(measurement),
-        'aqi':  {'label':'aqi',   'data':[x['measurement']['aqi']    for x in measurement], 'backgroundColor':'#181d27','borderColor':'#181d27','borderWidth':3},
+        'aqi':  {'label':'aqi',   'data':[x['measurement']['aqi']    for x in measurement], 'backgroundColor':'#f0b429','borderColor':'#f0b429','borderWidth':3},
         'pm10': {'label':'pm10',  'data':[x['measurement']['pm10']   for x in measurement], 'backgroundColor':'#cc0000','borderColor':'#cc0000','borderWidth':3},
         'pm2':  {'label':'pm2.5', 'data':[x['measurement']['pm2.5'] for x in measurement], 'backgroundColor':'#42C0FB','borderColor':'#42C0FB','borderWidth':3},
     }

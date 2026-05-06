@@ -215,9 +215,14 @@ and [NOTICE](NOTICE).
 | `http://<pi-ip>:8000/api/now/` | Single live reading (JSON) |
 | `http://<pi-ip>:8000/metrics` | Prometheus text format scrape target |
 
-## Roadmap (v1.3.0)
+## Roadmap
 
+### v1.3.0 (current dev)
+- [x] AQI line color: #181d27 (invisible on dark bg) → #f0b429 (amber, visible on both themes)
+- [x] PM10 color: #cc0000 → #ff6b6b (brighter red, readable on dark)
+- [x] Light/dark mode toggle button in web UI (persists via localStorage)
+
+### v1.4.0
 - [ ] Grafana dashboard JSON export for one-click import
-- [ ] Persist Grafana dashboards across container restarts
 - [ ] Alert threshold config in config.env (notify when AQI exceeds N)
 - [ ] Historical data export endpoint (/api/export.csv)

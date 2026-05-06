@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.3.0-dev] - 2026-05-05
+### Added
+- Light/dark mode toggle button in web UI
+  - Defaults to dark, toggles to light with sun/moon icon
+  - Preference persisted in localStorage across page loads
+  - Chart colors, grid, tick labels, legend all update on toggle
+
+### Fixed
+- AQI line color: was #181d27 (near-black, invisible on dark background)
+  Changed to #f0b429 (amber) — visible on both dark and light themes
+- PM10 line color: was #cc0000 (dark red, hard to read on dark background)
+  Changed to #ff6b6b (bright red) — readable on both themes
+- PM2.5 #42c0fb unchanged — already readable on dark
+
+### Changed
+- Chart dataset labels capitalised (aqi->AQI, pm10->PM10, pm2.5->PM2.5)
+- Chart card now has border and background matching theme
+
+
 ## [1.2.1] - 2026-05-05
 ### Fixed
 - README: branches table version 1.0.0 -> 1.2.1, layout tree template version,
