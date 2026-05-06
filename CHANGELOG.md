@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.1] - 2026-05-05
+### Added
+- /api/grafana/ endpoint: row-oriented JSON for Grafana Infinity datasource
+  Returns array of objects: timestamp, aqi, pm10, pm25
+  Ordered oldest to newest, last 30 readings
+  Grafana setup: Type=JSON, Parser=Default, Format=Table, Rows/Root=$[*]
+
+### Fixed
+- AQI backgroundColor/borderColor updated to #f0b429 in reconfigure_data()
+  (was still #181d27 in the API response color metadata)
+- docker compose restart replaced with down+build+up in deploy scripts
+  (restart does not rebuild image, so code changes were not picked up)
+
+
 ## [1.3.0-dev] - 2026-05-05
 ### Added
 - Light/dark mode toggle button in web UI
