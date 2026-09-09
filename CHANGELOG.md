@@ -1,5 +1,58 @@
 # Changelog
 
+## [1.3.2] - 2026-09-09
+### Fixed
+- AirQualityMonitor.get_measurement(): concurrent access to the SDS011 serial
+  handle (scheduler job vs on-demand request) had no locking and could hang
+  a Flask worker indefinitely, eventually starving all routes. Added
+  threading.Lock() with a 15s fail-fast timeout instead of blocking forever.
+- AirQualityMonitor.get_measurement(): python-aqi 0.6.1's EPA breakpoint
+  table tops out at PM2.5=500.4 / PM10=604 ug/m3 and raised IndexError past
+  that instead of clamping. Was crashing /api/now/ and the 60s scheduler job
+  whenever a reading crossed the ceiling. Now clamps to the table max and
+  falls back to AQI=500 (Hazardous) if it still throws.
+- AirQualityMonitor.save_measurement_to_redis()/get_last_n_measurements():
+  the 'measurements' Redis list was never trimmed and reached 175,000+
+  entries; every read did LRANGE 0,-1 (the entire list) just to use the
+  last 30. This was the root cause of /api/ latency climbing past 500s and
+  pegging the web container at 90%+ CPU — which also made the kiosk display
+  (which blocks on a curl to /api/ before launching Firefox) appear to hang
+  on every boot. Capped writes with LTRIM 0,99 and reads with LRANGE 0,99.
+
+
+## [1.3.1] - 2026-05-05
+### Added
+- /api/grafana/ endpoint: row-oriented JSON for Grafana Infinity datasource
+  Returns array of objects: timestamp, aqi, pm10, pm25
+  Ordered oldest to newest, last 30 readings
+  Grafana setup: Type=JSON, Parser=Default, Format=Table, Rows/Root=$[*]
+
+### Fixed
+- AQI backgroundColor/borderColor updated to #f0b429 in reconfigure_data()
+  (was still #181d27 in the API response color metadata)
+- docker compose restart replaced with down+build+up in deploy scripts
+  (restart does not rebuild image, so code changes were not picked up)
+
+
+## [1.3.0-dev] - 2026-05-05
+### Added
+- Light/dark mode toggle button in web UI
+  - Defaults to dark, toggles to light with sun/moon icon
+  - Preference persisted in localStorage across page loads
+  - Chart colors, grid, tick labels, legend all update on toggle
+
+### Fixed
+- AQI line color: was #181d27 (near-black, invisible on dark background)
+  Changed to #f0b429 (amber) — visible on both dark and light themes
+- PM10 line color: was #cc0000 (dark red, hard to read on dark background)
+  Changed to #ff6b6b (bright red) — readable on both themes
+- PM2.5 #42c0fb unchanged — already readable on dark
+
+### Changed
+- Chart dataset labels capitalised (aqi->AQI, pm10->PM10, pm2.5->PM2.5)
+- Chart card now has border and background matching theme
+
+
 ## [1.2.1] - 2026-05-05
 ### Fixed
 - README: branches table version 1.0.0 -> 1.2.1, layout tree template version,

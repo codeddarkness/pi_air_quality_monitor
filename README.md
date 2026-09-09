@@ -3,7 +3,7 @@
 Real-time air quality monitoring using a SDS011 particulate matter sensor,
 served via Flask + Redis + Docker with an auto-refreshing web interface.
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.3.2-blue)](CHANGELOG.md)
 [![Branch](https://img.shields.io/badge/branch-main%20%7C%20custom__dev-green)](./)
 
 ---
@@ -12,7 +12,7 @@ served via Flask + Redis + Docker with an auto-refreshing web interface.
 
 | Branch | Status | Description |
 |--------|--------|-------------|
-| `main` | ✅ stable | Production deployment — v1.2.1 |
+| `main` | ✅ stable | Production deployment — v1.3.2 |
 | `custom_dev` | 🔧 active dev | Feature development and fixes |
 
 ---
@@ -70,6 +70,8 @@ make api       # curl /api/ with JSON formatting
 | `http://<pi-ip>:8000/` | Live chart UI (auto-refreshes every 60s) |
 | `http://<pi-ip>:8000/api/` | Historical readings (last 30, JSON) |
 | `http://<pi-ip>:8000/api/now/` | Single live reading (JSON) |
+| `http://<pi-ip>:8000/api/grafana/` | Row-oriented JSON for Grafana Infinity |
+| `http://<pi-ip>:8000/metrics` | Prometheus text format scrape target |
 
 Default Pi IP on this deployment: **<PI_IP_ADDRESS>**
 
@@ -156,7 +158,7 @@ pi_air_quality_monitor/
 ├── install.sh                  Fresh deployment installer
 ├── Makefile                    Dev shortcuts
 ├── aqi_monitor.func            Symlink → scripts/service/aqi_monitor.func
-├── VERSION                     1.2.0
+├── VERSION                     1.3.2
 └── CHANGELOG.md
 ```
 
@@ -183,6 +185,12 @@ This project uses [Semantic Versioning](https://semver.org/):
 
 | Version | Date | Notes |
 |---------|------|-------|
+| `1.3.2` | 2026-09-09 | Fix: serial lock, AQI breakpoint clamp, unbounded Redis list |
+| `1.3.1` | 2026-05-05 | /api/grafana/ row-oriented endpoint |
+| `1.3.0` | 2026-05-05 | Light/dark mode toggle, chart color fixes |
+| `1.2.1` | 2026-05-05 | README/systemd/install.sh cleanup |
+| `1.2.0` | 2026-05-05 | /metrics endpoint, docker compose V2, Redis persistence |
+| `1.1.0` | 2026-05-05 | systemd autostart (replaces racy @reboot crontab) |
 | `1.0.0` | 2026-05-05 | Stable — auto-refresh UI, sensor fix, install.sh |
 | `0.2.2` | 2026-05-05 | Fix sensor detection, path migration |
 | `0.2.1` | 2026-05-05 | Auto-refresh chart, log redirect fix |
@@ -206,18 +214,19 @@ data collection. All upstream code retains its original authorship.
 and [NOTICE](NOTICE).
 
 ---
-## Endpoints
+## Roadmap
 
-| URL | Description |
-|-----|-------------|
-| `http://<pi-ip>:8000/` | Live chart UI (auto-refreshes every 60s) |
-| `http://<pi-ip>:8000/api/` | Historical readings (last 30, JSON) |
-| `http://<pi-ip>:8000/api/now/` | Single live reading (JSON) |
-| `http://<pi-ip>:8000/metrics` | Prometheus text format scrape target |
+### v1.3.2 (current)
+- [x] Serial access lock (fail-fast instead of hanging)
+- [x] AQI breakpoint clamp (was crashing on Hazardous-range readings)
+- [x] Unbounded Redis 'measurements' list capped (was 175k+ entries, causing /api/ to take 500s+)
 
-## Roadmap (v1.3.0)
+### v1.3.0
+- [x] AQI line color: #181d27 (invisible on dark bg) → #f0b429 (amber, visible on both themes)
+- [x] PM10 color: #cc0000 → #ff6b6b (brighter red, readable on dark)
+- [x] Light/dark mode toggle button in web UI (persists via localStorage)
 
+### v1.4.0
 - [ ] Grafana dashboard JSON export for one-click import
-- [ ] Persist Grafana dashboards across container restarts
 - [ ] Alert threshold config in config.env (notify when AQI exceeds N)
 - [ ] Historical data export endpoint (/api/export.csv)
