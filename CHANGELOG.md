@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.3.2] - 2026-09-09
+### Fixed
+- AirQualityMonitor.get_measurement(): concurrent access to the SDS011 serial
+  handle (scheduler job vs on-demand request) had no locking and could hang
+  a Flask worker indefinitely, eventually starving all routes. Added
+  threading.Lock() with a 15s fail-fast timeout instead of blocking forever.
+- AirQualityMonitor.get_measurement(): python-aqi 0.6.1's EPA breakpoint
+  table tops out at PM2.5=500.4 / PM10=604 ug/m3 and raised IndexError past
+  that instead of clamping. Was crashing /api/now/ and the 60s scheduler job
+  whenever a reading crossed the ceiling. Now clamps to the table max and
+  falls back to AQI=500 (Hazardous) if it still throws.
+- AirQualityMonitor.save_measurement_to_redis()/get_last_n_measurements():
+  the 'measurements' Redis list was never trimmed and reached 175,000+
+  entries; every read did LRANGE 0,-1 (the entire list) just to use the
+  last 30. This was the root cause of /api/ latency climbing past 500s and
+  pegging the web container at 90%+ CPU — which also made the kiosk display
+  (which blocks on a curl to /api/ before launching Firefox) appear to hang
+  on every boot. Capped writes with LTRIM 0,99 and reads with LRANGE 0,99.
+
+
 ## [1.3.1] - 2026-05-05
 ### Added
 - /api/grafana/ endpoint: row-oriented JSON for Grafana Infinity datasource
